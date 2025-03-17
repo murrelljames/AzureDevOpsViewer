@@ -10,12 +10,20 @@ namespace AzureDevOpsViewer
     public partial class Form1 : Form
     {
         private string organization = "access-devops"; // Replace with your organization name
-       private string personalAccessToken = "4qZqGkQYuSxq4cwh6bdMVF4zRuNhINSP7fPLdaNkBFR0WPlCmvqlJQQJ99AKACAAAAAFWvOZAAASAZDOrWsN"; // Replace with your PAT
+        private string personalAccessToken = Environment.GetEnvironmentVariable("AZURE_DEVOPS_PAT");
 
-        //4zs2uxfzk37wbo26txnt36p5d6oxuh5vldd3bp7qaxmdjswubeha
+
+        //
         public Form1()
         {
             InitializeComponent();
+            if (string.IsNullOrEmpty(personalAccessToken))
+            {
+                MessageBox.Show("Error: Personal Access Token (PAT) is missing. Please set the environment variable AZURE_DEVOPS_PAT.",
+                                "Authentication Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             FetchProjects();
 
             // Wire up the event for product selection
